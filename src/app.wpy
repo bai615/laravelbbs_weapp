@@ -33,12 +33,15 @@
 
 <script>
 import wepy from 'wepy'
+import 'wepy-async-function'
+// import api from '@/utils/api'
 
 export default class extends wepy.app {
   config = {
     pages: [
       'pages/index',
-      'pages/user'
+      'pages/user',
+      'pages/auth/login'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -72,10 +75,9 @@ export default class extends wepy.app {
     this.use('promisify')
   }
 
-  onLaunch() {
-    wepy.login().then(res => {
-      console.log('login: ', res)
-    })
+  async onLaunch() {
+    let res = await wepy.login()
+    console.log(res)
   }
 }
 </script>
