@@ -8,7 +8,7 @@
     <view class="page__bd login-wrap">
       <view class="weui-toptips weui-toptips_warn" wx:if="{{ errorMessage }}">{{ errorMessage }}</view>
 
-      <view class="weui-cells__title">Larabbs 用户登录</view>
+      <view class="weui-cells__title">Easybbs 用户登录</view>
       <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell weui-cell_input {{ error ? 'weui-cell_warn' : ''}}">
           <view class="weui-cell__hd">
@@ -32,6 +32,10 @@
             <icon type="warn" size="23" color="#E64340"></icon>
           </view>
         </view>
+      </view>
+
+      <view class="weui-agree__text">
+        如果你还没有 Easybbs 用户可以 <navigator url="/pages/auth/register" class="weui-agree__link">注册新用户</navigator>
       </view>
 
       <view class="weui-btn-area">
