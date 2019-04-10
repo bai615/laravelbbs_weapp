@@ -39,15 +39,16 @@
 </style>
 
 <script>
-  import wepy from 'wepy';
-  import 'wepy-async-function';
-  import api from '@/utils/api';
+  import wepy from 'wepy'
+  import 'wepy-async-function'
+  import api from '@/utils/api'
 
   export default class extends wepy.app {
     config = {
       pages: [
         'pages/index',
-        'pages/user',
+        'pages/users/me',
+        'pages/users/edit',
         'pages/auth/login',
         'pages/auth/register'
       ],
@@ -66,7 +67,7 @@
             selectedIconPath: 'images/index_selected.png'
           },
           {
-            pagePath: 'pages/user',
+            pagePath: 'pages/users/me',
             text: '我的',
             iconPath: 'images/user.png',
             selectedIconPath: 'images/user_selected.png'
@@ -78,50 +79,50 @@
     };
 
     constructor() {
-      super();
-      this.use('requestfix');
-      this.use('promisify');
+      super()
+      this.use('requestfix')
+      this.use('promisify')
     }
 
     async onLaunch() {
-      let res = await wepy.login();
-      console.log(res);
+      let res = await wepy.login()
+      console.log(res)
     }
 
     // 获取当前登录用户信息
     async getCurrentUser() {
       // 如果用户未登录
       if (!this.checkLogin()) {
-        return null;
+        return null
       }
 
       // 从缓存中获取用户信息
-      let user = wepy.getStorageSync('user');
+      let user = wepy.getStorageSync('user')
 
       try {
         // 登录了但是缓存中没有，请求接口获取
         if (!user) {
-          let userResponse = await api.authRequest('user');
+          let userResponse = await api.authRequest('user')
           // 状态码为 200 表示请求成功
           if (userResponse.statusCode === 200) {
-            user = userResponse.data;
-            wepy.setStorageSync('user', user);
+            user = userResponse.data
+            wepy.setStorageSync('user', user)
           }
         }
       } catch (err) {
-        console.log(err);
+        console.log(err)
         wepy.showModal({
           title: '提示',
           content: '服务器错误，请联系管理员'
-        });
+        })
       }
 
-      return user;
+      return user
     }
 
     // 用户是否已经登录
     checkLogin() {
-      return (wepy.getStorageSync('access_token') !== '');
+      return (wepy.getStorageSync('access_token') !== '')
     }
   }
 </script>
