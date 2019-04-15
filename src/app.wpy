@@ -51,6 +51,7 @@
         'pages/topics/userIndex',
         'pages/users/me',
         'pages/users/edit',
+        'pages/users/show',
         'pages/auth/login',
         'pages/auth/register'
       ],
