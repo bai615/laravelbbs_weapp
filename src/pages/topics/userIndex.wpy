@@ -21,6 +21,7 @@
     components = {
       topiclist: topicList
     }
+
     onLoad(options) {
       this.requestUrl = 'users/' + options.user_id + '/topics'
       // 组件数据改变，也需要调用 this.$apply()
@@ -28,14 +29,22 @@
       // 调用组件 reload 方法
       this.$invoke('topiclist', 'reload')
     }
+
+    onShow() {
+      this.$parent.checkRefreshPages(this.getCurrentPages().pop().route, () => {
+        this.$invoke('topiclist', 'reload')
+      })
+    }
+
     // 下拉刷新
     async onPullDownRefresh() {
       // 调用组件 reload 方法
       await this.$invoke('topiclist', 'reload')
       wepy.stopPullDownRefresh()
     }
+
     // 上拉加载更多
-    onReachBottom () {
+    onReachBottom() {
       // 调用组件 loadMore 方法
       this.$invoke('topiclist', 'loadMore')
     }
