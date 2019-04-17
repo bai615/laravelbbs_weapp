@@ -18,6 +18,14 @@
   .topic-title {
     padding: 15px;
   }
+
+  .create-reply {
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+  }
 </style>
 <template>
   <view class="page">
@@ -57,12 +65,15 @@
         <view class="weui-panel__bd">
           <repeat for="{{ topic.topReplies.data }}" wx:key="id" index="index" item="reply">
             <view class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
-              <navigator class="weui-media-box__hd weui-media-box__hd_in-appmsg" url="/pages/users/show?id={{ reply.user.id }}">
+              <navigator class="weui-media-box__hd weui-media-box__hd_in-appmsg"
+                         url="/pages/users/show?id={{ reply.user.id }}">
                 <image class="replyer-avatar weui-media-box__thumb" src="{{ reply.user.avatar }}"/>
               </navigator>
               <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                 <view class="weui-media-box__title">{{ reply.user.name }}</view>
-                <view class="weui-media-box__desc"><rich-text nodes="{{ reply.content }}" bindtap="tap"></rich-text></view>
+                <view class="weui-media-box__desc">
+                  <rich-text nodes="{{ reply.content }}" bindtap="tap"></rich-text>
+                </view>
                 <view class="weui-media-box__info">
                   <view class="weui-media-box__info__meta">{{ reply.created_at_diff }}</view>
                 </view>
@@ -71,12 +82,18 @@
           </repeat>
         </view>
         <view class="weui-panel__ft">
-          <navigator class="weui-cell weui-cell_access weui-cell_link" url="/pages/replies/index?topic_id={{ topic.id }}">
+          <navigator class="weui-cell weui-cell_access weui-cell_link"
+                     url="/pages/replies/index?topic_id={{ topic.id }}">
             <view class="weui-cell__bd">查看全部回复</view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
         </view>
       </view>
+
+      <!-- 回复按钮 -->
+      <navigator url="/pages/replies/create?topic_id={{ topic.id }}">
+        <image src="/images/reply.png" class="create-reply"/>
+      </navigator>
     </view>
   </view>
 </template>
@@ -155,9 +172,9 @@
       this.$apply()
     }
 
-    onShow() {
+    async onShow() {
       this.$parent.checkRefreshPages(this.getCurrentPages().pop().route, () => {
-        this.$invoke('topiclist', 'reload')
+        this.getTopic(this.topic.id)
       })
     }
 

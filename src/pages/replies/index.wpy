@@ -6,6 +6,14 @@
     width: 50px;
     height: 50px;
   }
+
+  .create-reply {
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+  }
 </style>
 <template>
   <view class="page">
@@ -31,12 +39,17 @@
           </view>
         </view>
       </view>
+
+      <!-- 回复链接 -->
+      <navigator url="/pages/replies/create?topic_id={{ topicId }}">
+        <image src="/images/reply.png" class="create-reply" />
+      </navigator>
     </view>
   </view>
 </template>
 <script>
   import wepy from 'wepy'
-  import replyMixmin from '@/mixins/replyMixin'
+  import replyMixin from '@/mixins/replyMixin'
 
   export default class replyIndex extends wepy.page {
     config = {
@@ -46,13 +59,22 @@
       navigationBarTitleText: '回复列表'
     }
     data = {
-      requestData: {}
+      requestData: {},
+      topicId: 0
     }
-    mixins = [replyMixmin]
+    mixins = [replyMixin]
     async onLoad(options) {
+      this.topicId = options.topic_id
       // 获取 URL 参数中的 话题id
       this.requestData.url = 'topics/' + options.topic_id + '/replies'
       this.getReplies()
+    }
+    onShow() {
+      this.$parent.checkRefreshPages(this.getCurrentPages().pop().route, () => {
+        this.noMoreData = false
+        this.page = 1
+        this.getReplies(true)
+      })
     }
   }
 </script>
