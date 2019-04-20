@@ -66,7 +66,8 @@ export default class ReplyMixin extends wepy.mixin {
 
     console.log(reply.user_id)
     console.log(user.id)
-    return (reply.user_id === user.id)
+    // 用户为回复发布者 或 有管理内容权限
+    return (reply.user_id === user.id) || this.$parent.can('manage_contents')
   }
 
   async onPullDownRefresh() {

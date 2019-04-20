@@ -35,21 +35,23 @@
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell weui-cell_input {{ errors.verification_code ? 'weui-cell_warn' : ''}}">
             <view class="weui-cell__bd">
-              <input class="weui-input" placeholder="请输入短信验证码，默认 123456" name="verification_code" />
+              <input class="weui-input" placeholder="请输入短信验证码，默认 123456" name="verification_code"/>
             </view>
             <view class="weui-cell__ft">
               <icon wx:if="{{ errors.verification_code }}" type="warn" size="23" color="#E64340"></icon>
             </view>
           </view>
         </view>
-        <view wx:if="{{ errors.verification_code }}" class="weui-cells__tips error-message">{{errors.verification_code[0]}}</view>
+        <view wx:if="{{ errors.verification_code }}" class="weui-cells__tips error-message">
+          {{errors.verification_code[0]}}
+        </view>
 
         <!-- 姓名 -->
         <view class="weui-cells__title {{ errors.name ? 'weui-cell_warn' : ''}}">姓名</view>
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell weui-cell_input {{ errors.name ? 'weui-cell_warn' : ''}}">
             <view class="weui-cell__bd">
-              <input class="weui-input" placeholder="请输入姓名" name="name" />
+              <input class="weui-input" placeholder="请输入姓名" name="name"/>
             </view>
             <view class="weui-cell__ft">
               <icon wx:if="{{ errors.name }}" type="warn" size="23" color="#E64340"></icon>
@@ -103,7 +105,7 @@
   export default class Login extends wepy.page {
     config = {
       navigationBarTitleText: '注册'
-    };
+    }
     data = {
       // 手机号
       phone: null,
@@ -119,7 +121,7 @@
       errors: {},
       // 短信验证码 key 及过期时间
       verificationCode: {}
-    };
+    }
 
     // 重置注册流程，初始化 data 数据
     resetRegister() {
@@ -131,7 +133,7 @@
     }
 
     // 表单提交
-    async submit (e) {
+    async submit(e) {
       this.errors = {}
       // 检查验证码是否已发送
       if (!this.verificationCode.key) {
@@ -185,6 +187,9 @@
           wepy.setStorageSync('access_token_expired_at', new Date().getTime() + registerResponse.data.meta.expires_in * 1000)
           // 设置用户信息
           wepy.setStorageSync('user', registerResponse.data)
+
+          // 获取用户权限
+          this.$parent.getPerms()
 
           wepy.showToast({
             title: '注册成功',
@@ -327,6 +332,6 @@
           })
         }
       }
-    };
+    }
   }
 </script>
